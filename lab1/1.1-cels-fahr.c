@@ -1,6 +1,9 @@
 #include <stdio.h>
 
 int main(){
-    printf("Opa");
+    float cels, fahr;
+    scanf("%f", &cels);
+    fahr = 1.8 * cels + 32.0;
+    printf("%.0f", fahr);
     return 0;
 }
