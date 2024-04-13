@@ -1,10 +1,10 @@
-**1) Celsius e Fahrenheit**
+**1.1) Celsius e Fahrenheit**
 
 Faça um programa que leia uma temperatura em graus Celsius e a converta para
-graus. Fahrenheit. Fórmula: F = (1.8 * C + 32).
+graus. Fahrenheit. `Fórmula: F = (1.8 * C + 32).`
 O programa deve imprimir o valor (arredondando os valores) em Fahrenheit, assim
 como no exemplo abaixo. 
-*OBS: utilize printf("%.0f ", valor); para arredondar.*
+*OBS: utilize `printf("%.0f ", valor);` para arredondar.*
 
 | Entrada | Saída|
 |:-:|:-:|
@@ -13,7 +13,7 @@ como no exemplo abaixo.
 | 1 | 34 |
 <hr>
 
-**2) Maior**
+**1.2) Maior**
 
 Faça um programa que lê 3 valores inteiros e imprima o maior deles.
 Formato de entrada e saída:
@@ -23,21 +23,17 @@ Formato de entrada e saída:
 | 2 <br> 5 <br> 6 |6 |
 <hr>
 
-**3) Divisível**
+**1.3) Divisível**
 
-Faça um programa que lê 3 valores inteiros x, y e z e testa se x é divisível por y e por
-z. Caso seja divisível, imprima: “O número é divisível”, caso contrário: “O número
-não é divisível”.
-Os valores devem ser lidos na seguinte ordem: x, y, z. Observe que a saída do
-programa deve estar no formato solicitado, com a primeira letra maiúscula e com
-acentuação gráfica.
+Faça um programa que lê 3 valores inteiros x, y e z e testa se x é divisível por y e por z. Caso seja divisível, imprima: `“O número é divisível”`, caso contrário: `“O número não é divisível”.`
+Os valores devem ser lidos na seguinte ordem: x, y, z. Observe que a saída do programa deve estar no formato solicitado, com a primeira letra maiúscula e com acentuação gráfica.
 
 | Entrada | Saída |
 |:-:|:-:|
 | 5 <br> 5 <br> 1 | O número é divisível |
 <hr>
 
-**4) Número mínimo de notas**
+**1.4) Número mínimo de notas**
 Considerando a existência de notas (cédulas) nos valores R$ 100, R$ 50, R$ 20, R$
 10, R$ 5, R$ 2 e R$ 1, escreva um programa que capture um valor inteiro em reais
 (R$) e determine o menor número de notas para se obter o montante fornecido. O
