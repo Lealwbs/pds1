@@ -1,197 +1,341 @@
-Aqui estãos todos os arquivos dos laboratórios do curso de Programação e Desenvolvimento de Software I.
+# Programação em C — Resumo Prático (PDS1 - UFMG)
 
-# Linguagem C
+Este documento reúne minhas anotações e conceitos essenciais estudados na disciplina **Programação e Desenvolvimento de Software I**.
+A ideia é servir como uma *wiki rápida* para consulta futura: sintaxe básica, operadores, estruturas de controle, tipos de dados, vetores, matrizes e boas práticas.
+
+---
 
 ## Introdução
+
+### Primeiro Programa
 
 ```c
 #include <stdio.h>
 
 int main(){
-	printf("Hello, world!\n");
-	system("pause"); //Usado para executar comandos do OS (Manter janela aberta)
-	return 0; //Retornar 0 (Sem erros), 1 (Com erros)
+    printf("Hello, world!\n");
+    return 0;
 }
 ```
 
-**printf()**: Usado para imprimir saída na tela.
+### Funções de Entrada e Saída
+
+#### `printf()`
+
+Usada para imprimir valores na tela.
 
 ```c
-int num
-printf("%d", num);
+int num = 10;
+printf("%d", num);  // imprime 10
 ```
 
-**scanf()**: Usado para ler entrada do usuário.
+Principais especificadores:
+
+* `%d` – int
+* `%f` – float
+* `%lf` – double
+* `%c` – char
+* `%s` – string
+
+#### `scanf()` e `scanf_s()`
+
+Leitura do teclado (sempre usar **&variável** para inteiros, floats etc).
 
 ```c
-int num;
-scanf("%d", &num);
+int x;
+scanf("%d", &x);
 ```
 
-**scanf_s()**: Uma versão mais segura de **`scanf()`** que evita vulnerabilidades de estouro de buffer.
+`scanf_s()` é uma versão mais segura (exigida em alguns compiladores, como MSVC).
+
+---
+
+## Estruturas de Controle
+
+### Condicionais
 
 ```c
-int num;
-scanf_s("%d", &num);
-```
-
-**if-else**: Usado para tomar decisões condicionais.
-
-```c
-if (condição) {
-    // código a ser executado se a condição for verdadeira
+if (cond) {
+    ...
 } else {
-    // código a ser executado se a condição for falsa
+    ...
 }
 ```
 
-**for loop**: Usado para executar um bloco de código repetidamente.
+### switch-case
 
 ```c
-for (inicialização; condição; incremento) {
-    // código a ser repetido
+switch (x) {
+    case 1: ...; break;
+    default: ...;
 }
 ```
 
-**while loop**: Outra estrutura de repetição.
+### Loops
+
+**for**
 
 ```c
-while (condição) {
-    // código a ser repetido enquanto a condição for verdadeira
-}
+for (int i = 0; i < 10; i++)
 ```
 
-**do-while loop**: Similar ao **`while`**, mas garante que o bloco seja executado pelo menos uma vez.
+**while**
 
 ```c
-do {
-    // código a ser repetido
-} while (condição);
+while (cond)
 ```
 
-**switch-case**: Usado para múltiplas condições.
+**do-while**
 
 ```c
-switch (expressão) {
-    case valor1:
-        // código a ser executado se expressão == valor1
-        break;
-    case valor2:
-        // código a ser executado se expressão == valor2
-        break;
-    default:
-        // código a ser executado se nenhum dos valores corresponder à expressão
-}
+do { ... } while (cond);
+```
+
+### Controle de Fluxo
+
+* `continue` → pula para a próxima iteração
+* `break` → encerra o laço
+* `goto` → evita usar (desencorajado)
+
+
+---
+
+
+
+## Operadores Fundamentais
+
+### Aritméticos
+
+| Operador | Função                      |
+| -------- | --------------------------- |
+| `+`      | Adição                      |
+| `-`      | Subtração                   |
+| `*`      | Multiplicação               |
+| `/`      | Divisão                     |
+| `%`      | Resto da divisão (inteiros) |
+
+### Unários
+
+| Operador    | Significado       |
+| ----------- | ----------------- |
+| `+x`        | valor positivo    |
+| `-x`        | negação           |
+| `++x / x++` | incremento        |
+| `--x / x--` | decremento        |
+| `&x`        | endereço          |
+| `*x`        | conteúdo apontado |
+
+### Lógicos
+
+| Operador | Função |
+| -------- | ------ |
+| `&&`     | AND    |
+| `\|\|`   | OR     |
+| `!`      | NOT    |
+
+### Atribuição Composta
+
+```c
+x += y;
+x -= y;
+x *= y;
+x /= y;
+x %= y;
+```
+
+### Operadores Bitwise
+
+| Op   | Significado | Exemplo     |
+| ---- | ----------- | ----------- |
+| `&`  | AND         | `x & 0x0F`  |
+| `\|` | OR          | `x \| 0x80` |
+| `^`  | XOR         | `x ^ 0xFF`  |
+| `~`  | NOT         | `~x`        |
+| `<<` | shift left  | `x << 2`    |
+| `>>` | shift right | `x >> 3`    |
+
+> Úteis em sistemas embarcados, compressão, flags, manipulação de bits etc.
+
+---
+
+## Tipos de Dados
+
+| Tipo                   | Tamanho               | Formato Printf | Uso                     |
+| ---------------------- | --------------------- | -------------- | ----------------------- |
+| `char`                 | 1 byte                | %c             | caracteres              |
+| `short`                | 2 bytes               | %hd            | inteiros pequenos       |
+| `int`                  | 4 bytes               | %d             | inteiro padrão          |
+| `long`                 | 8 bytes               | %ld            | inteiros grandes        |
+| `float`                | 4 bytes               | %f             | ponto flutuante simples |
+| `double`               | 8 bytes               | %lf            | ponto flutuante duplo   |
+| `long double`          | 16 bytes              | %Lf            | precisão estendida      |
+| `unsigned` (variações) | mesmo tamanho do tipo | %u             | somente positivos       |
+
+Atalhos úteis:
+
+```c
+sizeof(int);         // normalmente 4
+sizeof(double);      // normalmente 8
+sizeof(long long);   // normalmente 8
 ```
 
 ---
 
-# Tipos de Dados
+## Sequências de Escape (char)
 
-| Nome | Tamanho | Quando usar | printf %? | Exemplo |
-| --- | --- | --- | --- | --- |
-| char | 1 byte | Caracteres entre -128 e 127 (ou 0 e 255) | %c | 'A' |
-| short | 2 bytes | Inteiros -32,768 e 32,767 (ou 0 e 65,535) | %hd | 1234 |
-| int | 4 bytes | Inteiros gerais (maior parte dos casos). | %d | 123456 |
-| long | 8 bytes | Inteiros longos de alcance maior | %ld | 1234567890 |
-| float | 4 bytes | Números flutuante de precisão simples | %f | 3.14159 |
-| double | 8 bytes | Números flutuante de precisão dupla | %lf | 3.14159265358979 |
+| Código | Significado      |
+| ------ | ---------------- |
+| `\n`   | nova linha       |
+| `\t`   | tab              |
+| `\\`   | barra invertida  |
+| `\"`   | aspas            |
+| `\0`   | fim de string    |
+| `\a`   | beep             |
+| `\r`   | retorno de carro |
+| `\b`   | backspace        |
 
 ---
 
-# Matrizes
+## Palavras Reservadas (C89/C99)
 
-1. **Declaração de Matriz**: Uma matriz é uma coleção de elementos do mesmo tipo de dados, organizados em linhas e colunas. A declaração de uma matriz em C segue o formato: `tipo nome_da_matriz[tamanho_linhas][tamanho_colunas];`
-    
-    ```c
-    int matriz[3][3];
-    ```
-    
-2. **Inicialização de Matriz**: Você pode inicializar uma matriz ao declará-la ou atribuir valores posteriormente usando loops.
-    
-    ```c
-    int matriz[3][3] = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
-    ```
-    
-    Ou:
-    
-    ```c
-    int matriz[3][3];
-    for (int i = 0; i < 3; i++) {
-        for (int j = 0; j < 3; j++) {
-            matriz[i][j] = i + j;
-        }
+```c
+auto break case char const continue
+default do double else enum extern
+float for goto if int long register
+return short signed sizeof static
+struct switch typedef union unsigned
+void volatile while
+```
+
+---
+
+## Vetores (Arrays)
+
+### Declaração
+
+```c
+int v[5];
+float notas[100];
+```
+
+### Inicialização
+
+```c
+int v[3] = {15, 22, 7};
+int v2[] = {10, 20, 30};
+```
+
+### Acesso
+
+```c
+int x = v[2];
+v[1] = 99;
+```
+
+---
+
+## Matrizes (Arrays Multidimensionais)
+
+### Declaração
+
+```c
+int mat[3][3];
+```
+
+### Inicialização
+
+```c
+int m[2][2] = {{1,2}, {3,4}};
+```
+
+### Preenchimento via loops
+
+```c
+for (int i=0; i<3; i++){
+    for (int j=0; j<3; j++){
+        mat[i][j] = i + j;
     }
-    ```
-    
-3. **Acesso aos Elementos da Matriz**: Você pode acessar elementos individuais da matriz usando índices.
-    
-    ```c
-    int valor = matriz[1][2]; // Acessando o elemento na segunda linha, terceira coluna
-    ```
-    
-4. **Iteração sobre uma Matriz**: Você pode percorrer todos os elementos de uma matriz usando loops aninhados.
-    
-    ```c
-    for (int i = 0; i < tamanho_linhas; i++) {
-        for (int j = 0; j < tamanho_colunas; j++) {
-            // faça algo com matriz[i][j]
-        }
-    }
-    ```
-    
-5. **Passagem de Matriz para Funções**: Matrizes são passadas para funções como ponteiros para seu primeiro elemento.
-    
-    ```c
-    void funcao(int matriz[][3]) {
-        // faça algo com matriz
-    }
-    ```
-    
-6. **Vetores Unidimensionais**: Um vetor unidimensional é uma matriz com apenas uma dimensão. A declaração é semelhante a uma matriz, mas com apenas um tamanho.
-    
-    ```c
-    int vetor[5]; // Vetor de inteiros com 5 elementos
-    ```
-    
-    Acesso e manipulação são semelhantes aos de uma matriz, mas com apenas um índice.
-    
-    ```c
-    int valor = vetor[2]; // Acessando o terceiro elemento do vetor
-    ```
-    
-    ---
-    
-    # `int main()` vs `void main()`
-    
-    Em C, **`int main()`** e **`void main()`** são duas assinaturas diferentes para a função principal de um programa. A diferença entre elas está no tipo de valor que a função retorna e na lista de parâmetros que ela aceita:
-    
-    1. **int main()**:
-        - A função **`main`** retorna um valor inteiro (**`int`**).
-        - Esta é a forma padrão e mais comum de definir a função principal em C.
-        - O valor retornado pela função **`main`** é um código de saída que indica o status de execução do programa para o ambiente de execução (geralmente, um código não zero indica algum tipo de erro).
-        
-        Exemplo:
-        
-        ```c
-        int main() {
-            // código do programa
-            return 0; // indica que o programa foi executado com sucesso
-        }
-        ```
-        
-    2. **void main()**:
-        - A função **`main`** não retorna nenhum valor (**`void`**).
-        - Embora possa ser reconhecida por alguns compiladores, essa forma não é padrão e não é especificada pelo padrão da linguagem C.
-        - Pode resultar em comportamento indefinido ou incompatibilidade com alguns compiladores e ambientes.
-        
-        Exemplo:
-        
-        ```c
-        void main() {
-            // código do programa
-        }
-        ```
-        
-    
-    É importante notar que, embora **`void main()`** possa funcionar em alguns compiladores, não é considerado uma prática recomendada em C. O padrão da linguagem especifica **`int main()`** como a assinatura correta para a função principal.
+}
+```
+
+### Passando matrizes para funções
+
+```c
+void imprime(int m[][3]) { ... }
+```
+---
+
+## Função main()
+
+### Recomendado pelo padrão C
+
+```c
+int main(void) {
+    return 0;
+}
+```
+
+### Por que evitar `void main()`?
+
+* Não é padrão.
+* Pode gerar comportamento indefinido.
+* Sistemas operacionais esperam **código de retorno**.
+
+---
+
+## Boas Práticas Rápidas
+
+* **Sempre inicialize variáveis.**
+* Use `int main(void)` e `return 0;`.
+* Use `const` quando um valor não deve mudar.
+* Prefira `while` quando a quantidade de repetições é desconhecida.
+* Em leitura de strings, prefira `fgets()` em vez de `gets()` (que é insegura).
+* Sempre valide divisões para evitar divisão por zero.
+* Comente trechos importantes, mas evite comentar coisas óbvias.
+
+---
+
+## Extras Úteis (acréscimos moderados)
+
+### Conversão de tipos (casting)
+
+```c
+int x = 5, y = 2;
+float z = (float)x / y; // evita truncamento
+```
+
+### Constantes simbólicas
+
+```c
+#define PI 3.14159
+const int MAX = 100;
+```
+
+### Operador ternário
+
+```c
+int maior = (a > b) ? a : b;
+```
+
+### Função `sizeof()`
+
+```c
+printf("%zu", sizeof(double));
+```
+
+---
+
+## Tabela Resumida de Formatos (`printf` e `scanf`)
+
+| Tipo        | printf/scanf |
+| ----------- | ------ |
+| char        | `%c`  |
+| int         | `%d`  |
+| short       | `%hd` |
+| long        | `%ld` |
+| unsigned    | `%u`  |
+| float       | `%f`  |
+| double      | `%lf` |
+| long double | `%Lf` |
+| string      | `%s`  |
+
