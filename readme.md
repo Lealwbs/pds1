@@ -29,14 +29,6 @@ int num = 10;
 printf("%d", num);  // imprime 10
 ```
 
-Principais especificadores:
-
-* `%d` – int
-* `%f` – float
-* `%lf` – double
-* `%c` – char
-* `%s` – string
-
 #### `scanf()` e `scanf_s()`
 
 Leitura do teclado (sempre usar **&variável** para inteiros, floats etc).
@@ -47,6 +39,20 @@ scanf("%d", &x);
 ```
 
 `scanf_s()` é uma versão mais segura (exigida em alguns compiladores, como MSVC).
+
+#### Tabela Resumida de Formatos
+
+| Tipo        | printf/scanf |
+| ------------- | -------------- |
+| char        | `%c`         |
+| int         | `%d`         |
+| short       | `%hd`        |
+| long        | `%ld`        |
+| unsigned    | `%u`         |
+| float       | `%f`         |
+| double      | `%lf`        |
+| long double | `%Lf`        |
+| string      | `%s`         |
 
 ---
 
@@ -95,64 +101,52 @@ do { ... } while (cond);
 
 * `continue` → pula para a próxima iteração
 * `break` → encerra o laço
-* `goto` → evita usar (desencorajado)
-
+* `goto` e `label` → pula para uma linha específica (desencorajado)
 
 ---
-
-
 
 ## Operadores Fundamentais
 
 ### Aritméticos
 
-| Operador | Função                      |
-| -------- | --------------------------- |
-| `+`      | Adição                      |
-| `-`      | Subtração                   |
-| `*`      | Multiplicação               |
-| `/`      | Divisão                     |
-| `%`      | Resto da divisão (inteiros) |
+| Operador | Função                     | Atribuição Composta |
+| ---------- | ------------------------------ | ----------------------- |
+| `+`      | Adição                     | x += y                |
+| `-`      | Subtração                  | x -= y                |
+| `*`      | Multiplicação              | x *= y                |
+| `/`      | Divisão                     | x /= y                |
+| `%`      | Resto da divisão (inteiros) | x %= y                |
 
 ### Unários
 
-| Operador    | Significado       |
-| ----------- | ----------------- |
-| `+x`        | valor positivo    |
-| `-x`        | negação           |
-| `++x / x++` | incremento        |
-| `--x / x--` | decremento        |
-| `&x`        | endereço          |
-| `*x`        | conteúdo apontado |
+| Operador    | Significado                            |
+| ------------- | ---------------------------------------- |
+| `+x`        | valor positivo                         |
+| `-x`        | negação                              |
+| `++x / x++` | incremento (pré/pos)                  |
+| `--x / x--` | decremento (pré/pos)                  |
+| `&x`        | endereço / referenciação            |
+| `*x`        | conteúdo apontado / dereferenciação |
 
 ### Lógicos
 
 | Operador | Função |
-| -------- | ------ |
-| `&&`     | AND    |
-| `\|\|`   | OR     |
-| `!`      | NOT    |
-
-### Atribuição Composta
-
-```c
-x += y;
-x -= y;
-x *= y;
-x /= y;
-x %= y;
-```
+| ---------- | ---------- |
+| `==`     | EQUALS   |
+| `&&`     | AND      |
+| `\|\|`   | OR       |
+| `!`      | NOT      |
 
 ### Operadores Bitwise
 
-| Op   | Significado | Exemplo     |
-| ---- | ----------- | ----------- |
-| `&`  | AND         | `x & 0x0F`  |
-| `\|` | OR          | `x \| 0x80` |
-| `^`  | XOR         | `x ^ 0xFF`  |
-| `~`  | NOT         | `~x`        |
-| `<<` | shift left  | `x << 2`    |
-| `>>` | shift right | `x >> 3`    |
+| Op   | Significado | Exemplo    |
+| ------ | ------------- | ------------ |
+| `&`  | AND         | `x & 0x0F` |
+| `\|` | OR          | `x \| 0xF0`|
+| `^`  | XOR         | `x ^ 0xFF` |
+| `~`  | NOT         | `~x`       |
+| `<<` | shift left  | `x << 2`   |
+| `>>` | shift right | `x >> 3`   |
 
 > Úteis em sistemas embarcados, compressão, flags, manipulação de bits etc.
 
@@ -160,39 +154,32 @@ x %= y;
 
 ## Tipos de Dados
 
-| Tipo                   | Tamanho               | Formato Printf | Uso                     |
-| ---------------------- | --------------------- | -------------- | ----------------------- |
-| `char`                 | 1 byte                | %c             | caracteres              |
-| `short`                | 2 bytes               | %hd            | inteiros pequenos       |
-| `int`                  | 4 bytes               | %d             | inteiro padrão          |
-| `long`                 | 8 bytes               | %ld            | inteiros grandes        |
-| `float`                | 4 bytes               | %f             | ponto flutuante simples |
-| `double`               | 8 bytes               | %lf            | ponto flutuante duplo   |
-| `long double`          | 16 bytes              | %Lf            | precisão estendida      |
+| Tipo                     | Tamanho               | Formato Printf | Uso                     |
+| -------------------------- | ----------------------- | ---------------- | ------------------------- |
+| `char`                   | 1 byte                | %c             | caracteres              |
+| `short`                  | 2 bytes               | %hd            | inteiros pequenos       |
+| `int`                    | 4 bytes               | %d             | inteiro padrão         |
+| `long`                   | 8 bytes               | %ld            | inteiros grandes        |
+| `float`                  | 4 bytes               | %f             | ponto flutuante simples |
+| `double`                 | 8 bytes               | %lf            | ponto flutuante duplo   |
+| `long double`            | 16 bytes              | %Lf            | precisão estendida     |
 | `unsigned` (variações) | mesmo tamanho do tipo | %u             | somente positivos       |
-
-Atalhos úteis:
-
-```c
-sizeof(int);         // normalmente 4
-sizeof(double);      // normalmente 8
-sizeof(long long);   // normalmente 8
-```
 
 ---
 
 ## Sequências de Escape (char)
 
+
 | Código | Significado      |
-| ------ | ---------------- |
-| `\n`   | nova linha       |
-| `\t`   | tab              |
-| `\\`   | barra invertida  |
-| `\"`   | aspas            |
-| `\0`   | fim de string    |
-| `\a`   | beep             |
-| `\r`   | retorno de carro |
-| `\b`   | backspace        |
+| --------- | ------------------ |
+| `\n`    | nova linha       |
+| `\t`    | tab              |
+| `\\`    | barra invertida  |
+| `\"`    | aspas            |
+| `\0`    | fim de string    |
+| `\a`    | beep             |
+| `\r`    | retorno de carro |
+| `\b`    | backspace        |
 
 ---
 
@@ -263,6 +250,7 @@ for (int i=0; i<3; i++){
 ```c
 void imprime(int m[][3]) { ... }
 ```
+
 ---
 
 ## Função main()
@@ -321,21 +309,9 @@ int maior = (a > b) ? a : b;
 
 ```c
 printf("%zu", sizeof(double));
+sizeof(int);         // normalmente 4
+sizeof(double);      // normalmente 8
+sizeof(long long);   // normalmente 8
 ```
 
 ---
-
-## Tabela Resumida de Formatos (`printf` e `scanf`)
-
-| Tipo        | printf/scanf |
-| ----------- | ------ |
-| char        | `%c`  |
-| int         | `%d`  |
-| short       | `%hd` |
-| long        | `%ld` |
-| unsigned    | `%u`  |
-| float       | `%f`  |
-| double      | `%lf` |
-| long double | `%Lf` |
-| string      | `%s`  |
-
