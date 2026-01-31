@@ -315,3 +315,99 @@ sizeof(long long);   // normalmente 8
 ```
 
 ---
+
+## Strings
+
+### Declaração e Inicialização
+
+```c
+char str0[5];
+char str1[20] = "Hello";
+char str2[] = "World";
+char *str3 = "Lorem";
+char str4[] = {'I', 'p', 's', 'u', 'm', '\0'};
+str2[0] = 'B'; // "Borld"
+```
+
+* Strings em C são arrays de caracteres terminados em `\0` (null character). <br>
+Ex: `char str[6] = "Teste";` → na memória: T e s t e \0
+
+* Na inicialização: aspas duplas. Na atribuição: aspas simples para caracteres individuais.
+
+### Manipulação de Strings
+
+**string.h**: Biblioteca necessária para manipulação de strings.
+```c
+#include <string.h>
+```
+
+**scanf("%REGEX", texto);**: Lê uma linha inteira (até o Enter)
+```c
+char texto[100];
+scanf("%[^\n]", texto); 
+```
+
+**gets(str):** Lê uma string do teclado e coloca em str.
+```c
+char str[10];
+gets(str); 
+```
+
+**setbuf(stdin, NULL):** Limpa o buffer
+```c
+setbuf(stdin, NULL);
+```
+
+**printf(str):** Imprimir a string
+```c
+char str[20] = "Hello World";
+printf("%s",str); // imprime "Hello World"
+```
+
+**strlen(str):** Retorna o tamanho da string (sem contar o \0)
+```c
+char str[15] = "teste";
+printf("%d",strlen(str)); // imprime 5
+```
+
+**strcpy(dest, fonte):** Copia uma string para outra
+```c
+char str1[20] = "Hello";
+char str2[20];
+strcpy(str2, str1); // str2 agora é "Hello"
+```
+**strcat(dest, fonte):** Concatena (junta) duas strings
+```c
+char str1[15] = "bom ";
+char str2[15] = "dia";
+strcat(str1,str2); // str1 agora é "bom dia"
+```
+
+**strcmp(str1, str2):** Compara duas strings por ordem alfabética, se forem iguais retorna 0. Se str1 > str2, retorna um valor positivo. Se str1 < str2, retorna um valor negativo.
+```c
+if (strcmp(str1, str2) == 0)
+    printf("Strings iguais");
+else
+    printf("Strings diferentes");
+```
+
+**char \*fgets(char \*str, int tamanho, FILE \*fp):** Lê uma string do teclado até que um caractere de nova linha ('\n') seja lido (e incluído) ou tamanho-1 caracteres tenham sido lidos. A string resultante sempre terminará com '\0'. No final, retorna um ponteiro para a string lida ou NULL em caso de erro.
+```c
+char str[10];
+fgets(str, 10, stdin); // lê até 9 caracteres + \0 do stdin (teclado)
+```
+
+**int fputs (char \*str, FILE \*fp):** Escreve uma string em um arquivo ou na tela.
+Se o for bem sucedido, retorna um valor não negativo. Em caso de erro, retorna EOF (-1).
+```c
+char str[20] = "Hello World";
+fputs(str, stdout); // escreve "Hello World" no stdout (tela)
+```
+
+### Vetor de Strings (Array de Strings)
+
+```c
+char dia_semana[7][14] = {
+    "Domingo", "Segunda", "Terca", "Quarta", "Quinta", "Sexta", "Sabado"
+};
+```
