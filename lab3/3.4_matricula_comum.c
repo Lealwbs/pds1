@@ -2,17 +2,17 @@
 #include <stdlib.h>
 
 int main(){
-    int qtde_aeds, qtde_calc, *alunos_aeds, *alunos_calc;
+    int qtde_aeds, qtde_calc;
 
     printf("Quantos alunos em AEDS: ");
     scanf("%d", &qtde_aeds);
-    alunos_aeds = (int*)malloc(qtde_aeds * sizeof(int));
+    int *alunos_aeds = (int*)malloc(qtde_aeds * sizeof(int));
     for(int i=0; i<qtde_aeds; i++)
     scanf("%d", &alunos_aeds[i]);
     
     printf("Quantos alunos em CALC: ");
     scanf("%d", &qtde_calc);
-    alunos_calc = (int*)malloc(qtde_calc * sizeof(int));
+    int *alunos_calc = (int*)malloc(qtde_calc * sizeof(int));
     for(int i=0; i<qtde_calc; i++)
     scanf("%d", &alunos_calc[i]);
     
