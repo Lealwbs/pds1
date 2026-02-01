@@ -411,3 +411,211 @@ char dia_semana[7][14] = {
     "Domingo", "Segunda", "Terca", "Quarta", "Quinta", "Sexta", "Sabado"
 };
 ```
+
+---
+
+## Estruturas (Structs)
+
+### Definição
+```c
+struct Ponto {
+    int x;
+    int y;
+};
+
+struct aluno {
+    char nome[50];
+    int idade;
+    float nota;
+};
+```
+
+```c
+struct Ponto p1;
+p1.x = 10;
+p1.y = 20;
+
+struct aluno a1;
+strcpy(a1.nome, "Joao");
+a1.idade = 20;
+a1.nota = 8.5;
+```
+
+### Typedef
+
+O comando não cria um novo tipo, apenas um **apelido** (alias) para um tipo já existente.
+
+```c
+typedef double nota_t; // cria um novo tipo chamado nota_t
+typedef int cpf_t[11] ; // cria um tipo cpf_t (array de 11 ints)
+```
+
+Faz mais sentido usar typedef com structs:
+```c
+typedef struct {
+    double x;
+    double y;
+} ponto_t;
+
+int main(void) {
+    ponto_t p;
+    return 0;
+}
+```
+
+### Uso e Acesso
+
+**Estruturas Aninhadas:** Tipos compostos, acessando usando repetidos pontos `.`.
+
+```c
+typedef struct {
+    double x;
+    double y;
+} ponto_t;
+
+typedef struct {
+    ponto_t centro;
+    double raio;
+} circulo_t;
+
+typedef struct {
+    ponto_t base;
+    circulo_t janela;
+    double altura;
+    double largura;
+} casa_t;
+```
+
+**Inicializando:** Acessamos os campos usando `{}` ou `.`
+```c
+ponto_t p1;
+p1.x = 10.0;
+p1.y = 20.0;
+circulo_t c1 = {{0.0, 0.0}, 5.0};
+triangulo_t t1 = {{0.0, 0.0}, {5.0, 0.0}, {2.5, 5.0}};
+```
+
+**Array de estruturas:** Acessamos os campos usando `indices[]` e `.`
+```c
+// Variável "conjunto" é uma array de 3 circulos
+struct circulo_t conjunto[3]; 
+conjunto[0].centro.x = 10.0;
+conjunto[1].raio = 5.0;
+conjunto[2].largura = 15.0;
+
+// Tipo "triangulo_t" é uma array de 3 pontos
+typedef ponto_t triangulo_t[3]; 
+triangulo_t t1 = {{0.0, 0.0}, {0.0, 0.0}, {2.5, 5.0}};
+// Ou, poderia ser usado:
+struct ponto_t t1[3];
+
+t1[1] = (ponto_t){10.0, 9.0};
+t1[2].y = 0.5;
+```
+
+**Atribuição entre structs:** Devem ser do mesmo tipo
+```c
+ponto_t p1 = {1.0, 2.0};
+ponto_t p2;
+p2 = p1; // cópia dos valores de p1 para p2
+```
+```c
+ponto_t p[10];
+p[0] = (ponto_t){5.0, 7.0};
+p[1] = p[0]; // cópia dos valores de p[0] para p[1]
+```
+
+### Unions
+
+**Diferença:** Em uma `struct`, cada campo tem seu próprio espaço na memória. Em uma `union`, todos os campos compartilham o mesmo espaço, ou seja, o tamanho da union é igual ao tamanho do maior campo.
+
+Definição
+
+```c
+union dado {
+    int i;
+    float f;
+    char c;
+};
+```
+
+Uso
+```c
+union dado d;
+d.i = 10;
+printf("%d\n", d.i); // imprime 10
+d.f = 3.14;
+printf("%d\n", d.i); // comportamento indefinido
+printf("%f\n", d.f); // imprime 3.14
+```
+
+---
+
+## Enumeradores
+
+Definição
+
+```c
+enum colors { RED, GREEN, BLUE };
+
+typedef enum {
+    domingo = 1,
+    segunda = 2,
+    terca = 3,
+    quarta = 4,
+    quinta = 5,
+    sexta = 6,
+    sabado = 7,
+} dias_semana_t;
+```
+Uso
+
+```c
+enum colors c = RED;
+dias_semana_t hoje = quarta;
+if (hoje == 4) {
+    // faz algo
+}
+```
+
+**Alinhamento de memória**
+
+* char (1 byte)
+* short int (2 bytes)
+* int (4 bytes)
+* double (8 bytes)
+
+```c
+struct Bom_Alinhamento {
+    char c;        // 1 byte
+    int i;         // 4 bytes (3 bytes de padding)
+    double d;      // 8 bytes
+}; // total: 16 bytes
+
+struct Mal_Alinhamento {
+    char c;        // 1 byte
+    double d;      // 8 bytes (7 bytes de padding)
+    int i;         // 4 bytes
+}; // total: 20 bytes
+```
+
+**Representação em memória (com ASCII):** <br>
+> **[xxxx]:** padding (1 byte cada) <br>
+> **[char]:** character (2 bytes ao todo) <br>
+> **[int_]:** inteiro (4 bytes ao todo) <br>
+> **[dobl]:** double (8 bytes ao todo) <br>
+
+**Bom Alinhamento (16 bytes):**
+```
+[char][xxxx][xxxx][xxxx][int_][int_][int_][int_]
+[dobl][dobl][dobl][dobl][dobl][dobl][dobl][dobl]
+```
+**Mal Alinhamento (20 bytes):**
+```
+char c:   [char][xxxx][xxxx][xxxx][xxxx][xxxx][xxxx][xxxx]
+double d: [dobl][dobl][dobl][dobl][dobl][dobl][dobl][dobl]
+int i:    [int_][int_][int_][int_]
+```
+---
+
+
