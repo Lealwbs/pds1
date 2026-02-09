@@ -578,7 +578,7 @@ if (hoje == 4) {
 }
 ```
 
-**Alinhamento de memória**
+## Alinhamento de memória
 
 * char (1 byte)
 * short int (2 bytes)
