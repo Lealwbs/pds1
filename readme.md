@@ -494,6 +494,16 @@ p1.y = 20.0;
 circulo_t c1 = {{0.0, 0.0}, 5.0};
 triangulo_t t1 = {{0.0, 0.0}, {5.0, 0.0}, {2.5, 5.0}};
 ```
+```c
+struct cadastro{
+    char nome[50];
+    int idade;
+    char sexo;
+    float nota1, nota2, nota3;   
+} pes_a, pes_b, pes_c; // INICIALIZAÇÃO DIRETA
+
+struct cadastro cade; // INICIALIZAÇÃO SEPARADA
+```
 
 **Array de estruturas:** Acessamos os campos usando `indices[]` e `.`
 ```c
