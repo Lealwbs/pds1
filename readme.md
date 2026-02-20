@@ -42,17 +42,20 @@ scanf("%d", &x);
 
 #### Tabela Resumida de Formatos
 
-| Tipo        | printf/scanf |
-| ------------- | -------------- |
-| char        | `%c`         |
-| int         | `%d`         |
-| short       | `%hd`        |
-| long        | `%ld`        |
-| unsigned    | `%u`         |
-| float       | `%f`         |
-| double      | `%lf`        |
-| long double | `%Lf`        |
-| string      | `%s`         |
+| Tipo               | printf/scanf |
+| ------------------ | ------------ |
+| char               | `%c`         |
+| int                | `%d`         |
+| short              | `%hd`        |
+| long               | `%ld`        |
+| long long          | `%lld`       |
+| unsigned long      | `%lu`        |
+| unsigned long long | `%llu`       |
+| unsigned           | `%u`         |
+| float              | `%f`         |
+| double             | `%lf`        |
+| long double        | `%Lf`        |
+| string             | `%s`         |
 
 ---
 
@@ -628,4 +631,141 @@ int i:    [int_][int_][int_][int_]
 ```
 ---
 
+## Funções
 
+```c
+tipo_retorno nome_funcao(tipo_parametro parametro) {
+    // corpo da função
+    return retorno;
+}
+```
+
+### Uso
+
+```c
+
+int soma(int a, int b) {
+    return a + b;
+}
+
+// Void no parametro indica que a função não recebe argumentos, e no tipo de retorno indica que a função não retorna nada.
+void main(void) {
+    int x = 5, y = 10;
+    int resultado = soma(x, y);
+    printf("A soma é: %d\n", resultado);
+}
+```
+
+### Passagem por Valor
+
+```c
+void incrementa(int n) {
+    n = n + 1; // modifica apenas a cópia local
+    return; 
+}
+
+int main(void) {
+    int x = 5;
+    incrementa(x);
+    printf("%d\n", x); // imprime 5, não 6
+    return 0;
+}
+```
+
+### Escopo 
+
+* **Variáveis Locais:** Declaradas dentro de funções, só existem durante a execução da função.
+
+```c
+void funcao() {
+    int local = 10; // variável local, só existe dentro de funcao()
+}
+```
+
+* **Variáveis Globais:** Declaradas fora de todas as funções, podem ser acessadas por qualquer função. Devem ser usadas com moderação para evitar dependências e efeitos colaterais indesejados. Use escopo global apenas com constantes.
+
+```c
+const int GLOBAL_VALUE = 20; // variável global, pode ser acessada por todas as funções
+```
+
+* **Parâmetros formais:** Variáveis declaradas na definição da função, recebem os valores dos argumentos passados na chamada.
+
+```c
+void funcao(int parametro) {
+    // parametro é uma variável local que recebe o valor do argumento
+}
+```
+
+### Passagem por Referência (Ponteiros)
+
+* `&` → endereço de uma variável
+* `*` → conteúdo apontado por um ponteiro
+
+```c
+troca(int *a, int *b) {
+    int temp = *a; // guarda o valor apontado por a
+    *a = *b;       // atribui o valor apontado por b para a
+    *b = temp;     // atribui o valor guardado em temp para b
+}
+
+void incrementa(int *n) {
+    (*n)++; // incrementa o valor apontado por n
+}
+
+int main(void) {
+    int x = 5, y = 10;
+    troca(&x, &y); // passa os endereços de x e y
+    printf("x: %d, y: %d\n", x, y); // imprime x: 10, y: 5
+
+    int z = 7;
+    incrementa(&z); // passa o endereço de z
+    printf("%d\n", z); // imprime 8
+    return 0;
+}
+```
+
+### Arrays
+
+Vetores:
+```c
+void imprime_vetor(int vetor[], int size) {...}
+void imprime_vetor(int vetor[n], int size) {...}
+void imprime_vetor(int *vetor, int size) {...}
+```
+Matrizes:
+```c
+void imprime_matriz(int m[][4], int row, int col) {...}
+void imprime_matriz(int m[3][4], int row, int col) {...}
+void imprime_matriz(int (*m)[4], int row, int col) {...}
+void imprime_matriz(int **m, int row, int col) {...}
+```
+
+### Struct
+
+Valor:
+```c
+void imprime_ponto(ponto_t p) {
+    printf("Ponto: (%.2f, %.2f)\n", p.x, p.y);
+}
+
+int main(void) {
+    ponto_t p1 = {10.0, 20.0};
+    imprime_ponto(p1); // passa a struct por valor
+    return 0;
+}
+```
+
+Referência:
+```c
+void imprime_ponto(ponto_t *p) {
+    printf("Ponto: (%.2f, %.2f)\n", p->x, (*p).y );
+}
+
+int main(void) {
+    ponto_t p1 = {10.0, 20.0};
+    imprime_ponto(&p1); // passa o endereço da struct
+    return 0;
+}
+```
+
+---
