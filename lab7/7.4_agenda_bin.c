@@ -2,12 +2,23 @@
 #include <stdlib.h>
 #include <string.h>
 
-typedef struct contato_t{
-    char nome[50];
-    char tel[20];
+typedef char nome_t[50];
+typedef char tel_t[20];
+typedef struct contato{
+    nome_t nome;
+    tel_t tel;
     int idade;
-} contato;
+} contato_t;
 
+void inserir(contato_t pessoa, contato_t* agenda, int* posicao);
+
+void alterar(contato_t pessoa, contato_t* agenda, int count);
+
+void excluir(nome_t nome, contato_t* agenda, int count);
+
+void exibir(nome_t nome, contato_t* agenda, int count);
+
+int find(nome_t nome, contato_t* agenda, int count);
 
 int main(int argc, char** argv){
     if(argc < 2){
@@ -22,39 +33,83 @@ int main(int argc, char** argv){
         return EXIT_FAILURE;
     }
 
-    contato agenda[100];
+    contato_t agenda[100];
     int count = 0;
     char input[20];
 
     while(fgets(input, sizeof(input), file) != NULL){
 
-        // printf("Entrada: %s", input);
-
         if(!strcmp(input, "Inserir\n")){
-            puts("##### inserir");
-            contato c = {};
+            contato_t c;
             fscanf(file, "%s %d %s", c.nome, &c.idade, c.tel);
-            agenda[count++] = c;
-            printf("Registro %s %d %s inserido", c.nome, c.idade, c.tel);
+            inserir(c, agenda, &count);
+            continue;
         } else if(!strcmp(input, "Alterar\n")){
-            puts("##### alterar");
+            contato_t c;
+            fscanf(file, "%s %d %s", c.nome, &c.idade, c.tel);
+            alterar(c, agenda, count);
+            continue;
         } else if(!strcmp(input, "Excluir\n")){
-            puts("##### excluir");
+            nome_t nome;
+            fscanf(file, "%s", nome);
+            excluir(nome, agenda, count);
+            continue;
         } else if(!strcmp(input, "Exibir\n")){
-            puts("##### exibir");
+            nome_t nome;
+            fscanf(file, "%s", nome);
+            exibir(nome, agenda, count);
+            continue;
         } else {
-            puts("##### continue");
             continue;
         }
-    }
-
-    for(int i=0; i<count; i++){
-        contato c = agenda[i];
-        printf("Registro #%d: %s %d %s\n", i, c.nome, c.idade, c.tel);
     }
 
     fclose(file);
     return 0;
 }
+
+void inserir(contato_t pessoa, contato_t* agenda, int* posicao){
+    agenda[(*posicao)++] = pessoa;
+    printf("Registro %s %d %s inserido\n", pessoa.nome, pessoa.idade, pessoa.tel);
+};
+
+void alterar(contato_t pessoa, contato_t* agenda, int count){
+    int pos = find(pessoa.nome, agenda, count);
+    if(pos == -1){
+        printf("Registro %s invalido\n", pessoa.nome);
+        return;
+    }
+    agenda[pos] = pessoa;
+    printf("Registro %s %d %s alterado\n", pessoa.nome, pessoa.idade, pessoa.tel);
+};
+
+void excluir(nome_t nome, contato_t* agenda, int count){
+    int pos = find(nome, agenda, count);
+    if(pos == -1){
+        printf("Registro %s invalido\n", nome);
+        return;
+    }
+    contato_t pessoa = agenda[pos];
+    contato_t vazio = {"", "", 0};
+    agenda[pos] = vazio;
+    printf("Registro %s %d %s excluido\n", pessoa.nome, pessoa.idade, pessoa.tel);
+};
+
+void exibir(nome_t nome, contato_t* agenda, int count){
+    int pos = find(nome, agenda, count);
+    if(pos == -1){
+        printf("Registro %s invalido\n", nome);
+        return;
+    }
+    contato_t pessoa = agenda[pos];
+    printf("Registro %s %d %s exibido\n", pessoa.nome, pessoa.idade, pessoa.tel);
+};
+
+int find(nome_t nome, contato_t* agenda, int count){
+    for(int i=0; i<count; i++)
+        if(!strcmp(nome, agenda[i].nome))
+            return i;
+    return -1;
+};
 
 // gcc -Wall .\7.4_agenda_bin.c -o .\bin\7.4_agenda_bin.exe | .\bin\7.4_agenda_bin.exe .\files\7.4_arquivo.txt
