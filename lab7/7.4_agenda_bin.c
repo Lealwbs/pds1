@@ -40,27 +40,25 @@ int main(int argc, char** argv){
     while(fgets(input, sizeof(input), file) != NULL){
 
         if(!strcmp(input, "Inserir\n")){
+            if(count >= 100){
+                printf("Espaco insuficiente.\n");
+                continue;
+            }
             contato_t c;
             fscanf(file, "%s %d %s", c.nome, &c.idade, c.tel);
             inserir(c, agenda, &count);
-            continue;
         } else if(!strcmp(input, "Alterar\n")){
             contato_t c;
             fscanf(file, "%s %d %s", c.nome, &c.idade, c.tel);
             alterar(c, agenda, count);
-            continue;
         } else if(!strcmp(input, "Excluir\n")){
             nome_t nome;
             fscanf(file, "%s", nome);
             excluir(nome, agenda, count);
-            continue;
         } else if(!strcmp(input, "Exibir\n")){
             nome_t nome;
             fscanf(file, "%s", nome);
             exibir(nome, agenda, count);
-            continue;
-        } else {
-            continue;
         }
     }
 
