@@ -990,3 +990,139 @@ fseek(arquivo, -20, SEEK_END); // move 20 bytes antes do final do arquivo
 ```
 
 ---
+
+## Ponteiro
+
+### Conceitos
+
+**Variável:** É um espaço reservado de memória usado para guardar um valor que pode ser modificado pelo programa.
+```c
+int x = 10; // variável normal
+```
+
+**Ponteiro:** É um espaço reservado de memória usado para guardar o endereço de memória de uma outra variável.
+```c
+int *p = &x; // ponteiro de inteiro (aponta para um inteiro) que guarda o endereço de x
+float *f = NULL; // ponteiro de float que não aponta para nada (inicializado como NULL)
+struct aluno *a; // ponteiro para uma struct aluno (ainda não aponta para nada)
+```
+
+**Observação:** `int* p` = `int *p`
+
+### Utilização
+
+```c
+int valor = 5;
+int *p = &valor;
+*p = 10;
+printf("Valor: %d\n", valor); // imprime 10
+```
+
+`p1 = p2`: p1 aponta para o mesmo endereço que p2.
+
+`*p1 = *p2`: o valor apontado por p1 recebe o valor apontado por p2.
+
+### Operações
+
+| Operador | Descrição | Exemplo |
+| --------- | ------------------ | ----------- |
+| `&`       | Endereço de uma variável | `&x` 
+| `*`       | Conteúdo apontado por um ponteiro | `*p`
+| `->`      | Acesso a membro de uma struct via ponteiro | `p->campo` (ou `(*p).campo`) |
+| `++`     | Avança o ponteiro para o próximo elemento (dependendo do tipo) | `p+1` ou `p++`
+| `--`     | Retrocede o ponteiro para o elemento anterior | `p-1` ou `p--`
+| `[]`      | Acesso a elementos de um array via ponteiro | `p[i]` (equivalente a `*(p + i)`) |
+| `==`, `!=` | Comparação de ponteiros (verifica se apontam para o mesmo endereço) | `p1 == p2` |
+| `>`, `>=`, `<`, `<=` | Comparação de ponteiros (verifica a ordem dos endereços) | `p1 > p2` |
+
+**Observação:** As operações de adição e subtração no endereço dependem do tipo de dado que o ponteiro aponta. Por exemplo, se `p` é um ponteiro para `int`, então `p + 1` avança o ponteiro em 4 bytes (tamanho de um int), não em 1 byte.
+
+```c
+int y = 10;
+int *p = &y; 
+// p = 0x7fff6b481f90; 
+// p++ = 0x7fff6b481f94 (int = 4 bytes)
+```
+
+### Ponteiro Genérico
+
+```c
+void *ptr; // ponteiro genérico, pode apontar para qualquer tipo
+int x = 10;
+ptr = &x; // ptr agora aponta para x
+```
+
+Para acessar o valor apontado por um ponteiro genérico, é necessário fazer um cast para o tipo correto:
+
+```c
+int* p = (int*) ptr; // converte ptr para ponteiro de int
+```
+
+### Ponteiros e Arrays
+
+```c
+int vet[5] = {1, 2, 3, 4, 5};
+int *p = vet; // p aponta para o primeiro elemento de vet (vet[0])
+```
+
+Temos que:
+
+`p` é equivalente a `&vet[0]` que é equivalente a `vet` <br>
+`*p` é equivalente a `vet[0]` que é equivalente a `*vet` <br>
+`vet[indice]` é equivalente a `*(vet+indice)` <br>
+`&vet[indice]` é equivalente a `(vet+indice)`
+
+### Matrizes
+
+```c
+int mat[3][4]; // matriz de 3 linhas e 4 colunas
+int (*p)[4] = mat; // p é um ponteiro para um array de 4 inteiros
+
+// Percorrer toda matriz:
+for (int i = 0; i < 3; i++) {
+    for (int j = 0; j < 4; j++) 
+        printf("%d ", *(*(p + i) + j));
+    printf("\n");
+}
+
+// Ou então percorrendo a matriz como um array linear:
+for (int i = 0; i < 12; i++) {
+    printf("%d ", *(*p + i)); 
+}
+```
+
+### Ponteiros Múltiplos
+
+```c
+int x = 10;
+int *p1 = &x; // ponteiro de int
+int **p2 = &p1; // ponteiro de ponteiro de int
+int ***p3 = &p2; // ponteiro de ponteiro de ponteiro de int
+```
+
+### Ponteiros para Funções
+
+```c
+int soma(int a, int b) {
+    return a + b;
+}
+
+int main(void) {
+    int (*operacao)(int, int) = soma; // ponteiro para função que recebe 2 ints e retorna um int
+    int resultado = operacao(5, 10); // chama a função soma através do ponteiro
+    printf("Resultado: %d\n", resultado); // imprime 15
+    return 0;
+}
+```
+
+### Programa na Memória
+
+**Stack/Pilha:** Armazena variáveis locais, parâmetros de função e endereços de retorno. Cresce e diminui dinamicamente conforme as funções são chamadas e retornam.
+
+**Espaço Livre:** Área de memória para código e dados alocados dinamicamente. O programador é responsável por gerenciar essa memória (alocar e liberar).
+
+**Heap:** Área de memória para alocação dinâmica. O programador é responsável por gerenciar essa memória (alocar e liberar).
+
+**Globais:** Variáveis globais e estáticas são armazenadas em uma região separada da memória, que é alocada quando o programa inicia e liberada quando o programa termina.
+
+**Código:** Instruções do programa são armazenadas em uma região de memória somente leitura, que é compartilhada entre todas as instâncias do programa.
