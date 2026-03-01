@@ -1,0 +1,42 @@
+BasedOnStyle: LLVM
+
+IndentWidth: 4
+TabWidth: 4
+UseTab: Never
+
+ColumnLimit: 140
+
+# Chaves no estilo K&R (na mesma linha)
+BreakBeforeBraces: Attach
+
+# Sem espaço antes ou depois de parênteses em chamadas e condições
+SpaceBeforeParens: Never
+SpacesInParentheses: false
+SpaceAfterCStyleCast: false
+
+# Remover TODOS os espaços em operadores binários
+SpaceAroundOperators: false
+
+# Manter ponteiros colado no tipo ou no nome?
+# Você usa predominantemente "int *p"
+PointerAlignment: Left
+
+# Parâmetros quebram como você faz
+BinPackParameters: false
+BinPackArguments: false
+BreakFunctionParameters: true
+
+AllowAllParametersOfDeclarationOnNextLine: true
+
+# Nunca colocar coisas curtas em uma linha só
+AllowShortIfStatementsOnASingleLine: false
+AllowShortLoopsOnASingleLine: false
+AllowShortFunctionsOnASingleLine: None
+
+# Switch/case como você usa
+IndentCaseLabels: true
+
+# Comentários não são reflowados
+ReflowComments: false
+
+SortIncludes: true
