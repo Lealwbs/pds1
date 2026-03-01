@@ -1126,3 +1126,136 @@ int main(void) {
 **Globais:** Variáveis globais e estáticas são armazenadas em uma região separada da memória, que é alocada quando o programa inicia e liberada quando o programa termina.
 
 **Código:** Instruções do programa são armazenadas em uma região de memória somente leitura, que é compartilhada entre todas as instâncias do programa.
+
+## Alocação Dinâmica
+
+Podemos simplificar um programa com um esquema como o abaixo:
+
+- Código: Sempre existe, ocupa espaço.
+- Variáveis globais: Pode existir, ocupa espaço se existir.
+- Stack/Pilha: Sempre existe, cresce e diminui dinamicamente.
+- Heap: Pode existir, alocação dinâmica.
+
+A alocação dinâmica permite ao programador criar “variáveis” em tempo de execução, ou seja, alocar memória para novas variáveis quando o programa está sendo executado, e não apenas quando se está escrevendo o programa.
+
+```c
+#include <stdlib.h> 
+```
+
+A stdlib É a biblioteca padrão de utilidades, que inclui funções para alocação dinâmica de memória, controle de processos, conversões e outras operações comuns.
+
+### Malloc (Memory Allocation)
+
+```c
+void *malloc (unsigned int num);
+```
+
+Aloca um bloco de memória de `size` bytes e retorna um ponteiro para o início do bloco. O conteúdo do bloco é indeterminado (lixo de memória). Retorna `NULL` se a alocação falhar (se não houver memória suficiente)
+
+```c
+// Aloca 1000 bytes para uma string de caracteres
+char* p = (char*) malloc(1000);
+
+// Aloca espaço para um array de 50 inteiros
+int* i = (int*) malloc(50*sizeof(int)); 
+```
+
+- `sizeof()`: Retorna o tamanho em bytes de um tipo ou variável. Útil para calcular o tamanho necessário para alocar memória dinamicamente.
+- `(tipo*)`: É necessário o type cast para converter o `void*` (ponteiro genérico) retornado por `malloc()`, `calloc()` ou `realloc()` para o tipo de ponteiro desejado. Exemplo: `(char*)`, `(int*)`, etc.
+
+### Calloc (Clear Allocation)
+
+```c
+void *calloc (unsigned int num, unsigned int size);
+```
+
+Aloca um bloco de memória para um array de `num` elementos, cada um com `size` bytes, e inicializa todos os bytes a zero. Retorna um ponteiro para o início do bloco ou `NULL` se a alocação falhar.
+
+```c
+// aloca espaço para 100 caracteres e inicializa com '\0'
+char *str = (char*) calloc(100, sizeof(char)); 
+
+// aloca espaço para um array de 50 inteiros e inicializa com 0
+int *i = (int*) calloc(50, sizeof(int));
+```
+
+### Realloc (Reallocation)
+
+```c
+void *realloc (void *ptr, unsigned int new_size);
+```
+
+Aloca um novo bloco de memória de `new_size` bytes (que pode ser menor ou maior que o bloco original), copia o conteúdo do bloco apontado por `ptr` para o novo bloco (até o mínimo entre o tamanho antigo e o novo), e libera o bloco antigo. Retorna um ponteiro para o início do bloco redimensionado ou `NULL` se a realocação falhar. 
+
+```c
+// redimensiona o bloco apontado por p para 32 bytes
+p = (char*) realloc(p, 32);
+
+// redimensiona o array de inteiros para 100 elementos
+i = (int*) realloc(i, 100 * sizeof(int));
+```
+
+Observações:
+
+- Se `ptr == NULL`: `realloc()` se comporta como `malloc(new_size)`.
+- Se `new_size == 0` e `ptr != NULL`: `realloc()` se comporta como `free(ptr)` e retorna `NULL`.
+- Se não houver memória suficiente para alocar o novo bloco: `realloc()` retorna `NULL` e o bloco original permanece inalterado (não é liberado).
+
+### Free (Liberação)
+
+```c
+void free (void *ptr);
+```
+
+Diferente das variáveis definidas durante a escrita do programa, as variáveis alocadas dinamicamente não são liberadas automaticamente pelo programa. Assim, é necessáro a liberação usando a função `free()`, que libera o bloco de memória apontado por `ptr`. 
+
+Após a chamada, o ponteiro `ptr` torna-se inválido e não pode ser usado para acessar a memória liberada.
+
+```c
+int* p = (int*) malloc(10 * sizeof(int));
+free(p); // libera o bloco de memória apontado por p
+```
+
+### Alocação de matrizes
+
+```c
+#include <stdlib.h>
+
+int rows = 3, cols = 4;
+
+// aloca um array de ponteiros para as linhas
+int **mat = (int**) malloc(rows * sizeof(int*));
+for (int i = 0; i < rows; i++) {
+    // aloca um array de inteiros para cada linha
+    mat[i] = (int*) malloc(cols * sizeof(int)); 
+}
+
+// Liberação da matriz
+for (int i = 0; i < rows; i++) {
+    free(mat[i]); // libera cada linha
+}
+
+free(mat); // libera o array de ponteiros
+```
+
+![Alocação de Matrizes](/lab10/10.0_matriz.png "Matriz")
+
+### Alocação de structs
+
+```c
+#include <stdlib.h>
+
+typedef struct aluno{
+    char nome[50];
+    int idade;
+    float nota;
+} aluno_t;
+
+aluno_t *a = (aluno_t*) malloc(sizeof(struct aluno)); 
+aluno_t *b = (aluno_t*) malloc(sizeof(aluno_t));
+
+free(a);
+free(b);
+```
+
+> ### Save the whales, Feed the Hungry, Free the Malloc()s
