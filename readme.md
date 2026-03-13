@@ -1259,3 +1259,32 @@ free(b);
 ```
 
 > ### Save the whales, Feed the Hungry, Free the Malloc()s
+
+<br>
+
+## Recursão
+
+### Conceito
+
+Recursão é uma técnica de programação onde uma função chama a si mesma para resolver um problema. Uma função recursiva deve ter uma condição de parada para evitar chamadas infinitas.
+
+### Exemplo: Fatorial
+
+```c
+int fatorial(int n) {
+    if (n == 0) return 1; // condição de parada
+    return n * fatorial(n - 1); // chamada recursiva
+}
+```
+
+### Vantagens
+
+- Código mais simples e elegante para problemas que têm uma estrutura recursiva natural (como árvores, grafos, etc).
+- Facilita a resolução de problemas complexos dividindo-os em subproblemas menores.
+
+### Desvantagens
+
+- Pode levar a um grande número de chamadas recursivas, o que pode causar estouro de pilha (stack overflow) se a profundidade da recursão for muito grande.
+- Pode ser menos eficiente do que soluções iterativas devido à sobrecarga de chamadas de função e ao uso de memória para a pilha de chamadas.
+
+<br>
