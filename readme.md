@@ -908,20 +908,24 @@ fclose(f); // fecha o arquivo quando terminar, retorna 0 se sucesso, EOF (-1) se
 
 ### Funções de Leitura e Escrita
 
-| Função                   | Descrição                            | 
-| ------------------------ | ------------------------------------ | 
-| `scanf(...)`             | Lê da entrada padrão (teclado)       |
-| `getc(...)`              | Lê um caractere da entrada padrão    |
-| `gets(...)`              | Lê uma string* da entrada padrão (insegura) |
-| `putc(...)`              | Escreve um caractere na saída padrão |
-| `puts(...)`              | Escreve uma string na saída padrão   |
-| `printf(...)`            | Escreve formatado na saída padrão    | 
-| `fscanf(arquivo, ...)`   | Lê de um arquivo (não retorna EOF)   |
-| `fgetc(arquivo)`         | Lê um caractere de um arquivo (retorna EOF) |
-| `fgets(str, tamanho, arquivo)`    | Lê uma string de um arquivo (segura) |
-| `fputc(char, arquivo)`    | Escreve um caractere em um arquivo   |
-| `fputs(str, arquivo)`    | Escreve uma string em um arquivo     |
-| `fprintf(arquivo, ...)`  | Escreve formatado em um arquivo      |
+| Função | Descrição | Retorno | Observações |
+|--------|-----------|---------|-------------|
+| `scanf(const char *fmt, ...)` | Lê da entrada padrão formatado | Nº de itens lidos, ou `EOF` em erro | Deixa `\n` no buffer; prefira `fflush(stdin)` após uso |
+| `getc(FILE *stream)` | Lê um caractere de um stream | Caractere como `int`, ou `EOF` | Equivalente a `fgetc`; retorna `int` para comportar `EOF` |
+| `getchar()` | Lê um caractere da entrada padrão | Caractere como `int`, ou `EOF` | Atalho para `getc(stdin)` |
+| `gets(char *str)` | Lê uma string da entrada padrão | Ponteiro para `str`, ou `NULL` | ⚠️ **Removida no C11** — não faz verificação de tamanho, vulnerável a buffer overflow |
+| `putc(int c, FILE *stream)` | Escreve um caractere em um stream | Caractere escrito, ou `EOF` em erro | Equivalente a `fputc`; pode ser implementada como macro |
+| `putchar(int c)` | Escreve um caractere na saída padrão | Caractere escrito, ou `EOF` em erro | Atalho para `putc(c, stdout)` |
+| `puts(const char *str)` | Escreve uma string + `\n` na saída padrão | Valor não-negativo, ou `EOF` em erro | Adiciona `\n` automaticamente ao final |
+| `printf(const char *fmt, ...)` | Escreve formatado na saída padrão | Nº de caracteres escritos, ou negativo em erro | Não garante flush imediato; use `fflush(stdout)` se necessário |
+| `fscanf(FILE *arq, const char *fmt, ...)` | Lê formatado de um arquivo | Nº de itens lidos, ou `EOF` | Retorna `EOF` quando chega ao fim do arquivo |
+| `fgetc(FILE *arq)` | Lê um caractere de um arquivo | Caractere como `int`, ou `EOF` | Use `feof(arq)` após `EOF` para distinguir fim de arquivo de erro |
+| `fgets(char *str, int n, FILE *arq)` | Lê até `n-1` caracteres de um arquivo | Ponteiro para `str`, ou `NULL` no fim/erro | ✅ Preferida a `gets`; preserva o `\n` lido na string |
+| `fputc(int c, FILE *arq)` | Escreve um caractere em um arquivo | Caractere escrito, ou `EOF` em erro | — |
+| `fputs(const char *str, FILE *arq)` | Escreve uma string em um arquivo | Valor não-negativo, ou `EOF` em erro | Não adiciona `\n` automaticamente (diferente de `puts`) |
+| `fprintf(FILE *arq, const char *fmt, ...)` | Escreve formatado em um arquivo | Nº de caracteres escritos, ou negativo em erro | Funciona como `printf`, mas direcionado a um arquivo |
+
+> **Dica:** Para leitura segura de strings do teclado, prefira `fgets(str, tamanho, stdin)` no lugar de `gets` ou `scanf("%s", ...)`, pois ambas são vulneráveis a estouro de buffer.
 
 ### Outras Funções
 
